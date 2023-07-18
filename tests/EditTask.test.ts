@@ -19,7 +19,7 @@ const statusOptions: Status[] = [Status.DONE, Status.TODO];
 
 const EMPTY_ENTRY = EMPTY[0];
 
-export function printCombinationsAsyncSoon<T1, T2, T3, T4, T5, T6, T7, T8, T9>(
+export async function printCombinationsAsyncSoon<T1, T2, T3, T4, T5, T6, T7, T8, T9>(
     func: <T1, T2, T3, T4, T5, T6, T7, T8, T9>(
         t1: T1,
         t2: T2,
@@ -40,7 +40,7 @@ export function printCombinationsAsyncSoon<T1, T2, T3, T4, T5, T6, T7, T8, T9>(
     params7: T7[],
     params8: T8[],
     params9: T9[],
-): string {
+): Promise<string> {
     let text = '';
     for (const p1 of params1) {
         for (const p2 of params2) {
@@ -61,7 +61,7 @@ export function printCombinationsAsyncSoon<T1, T2, T3, T4, T5, T6, T7, T8, T9>(
                                             (p) => p !== EMPTY_ENTRY,
                                         );
 
-                                        text += `[${parameters}] => ${output}\n`;
+                                        text += `[${parameters}] => ${await output}\n`;
                                     }
                                 }
                             }
@@ -74,12 +74,17 @@ export function printCombinationsAsyncSoon<T1, T2, T3, T4, T5, T6, T7, T8, T9>(
     return text;
 }
 
-export function verifyAllCombinations2AsyncSoon<T1, T2>(func: (t1: T1, t2: T2) => any, params1: T1[], params2: T2[]) {
+export async function verifyAllCombinations2AsyncSoon<T1, T2>(
+    func: (t1: T1, t2: T2) => any,
+    params1: T1[],
+    params2: T2[],
+) {
     // @ts-ignore
     verify(
-        printCombinationsAsyncSoon(
+        await printCombinationsAsyncSoon(
             // @ts-ignore
-            (t1: T1, t2: T2, _t3: any, _t4: any, _t5: any, _t6: any, _t7: any, _t8: any, _t9: any) => func(t1, t2),
+            async (t1: T1, t2: T2, _t3: any, _t4: any, _t5: any, _t6: any, _t7: any, _t8: any, _t9: any) =>
+                await func(t1, t2),
             params1,
             params2,
             EMPTY,
@@ -211,8 +216,7 @@ describe('Task editing', () => {
             async (globalFilter, setCreatedDate) => {
                 GlobalFilter.set(globalFilter);
                 updateSettings({ setCreatedDate });
-                const result = await editTask(oldDescription, oldDescription);
-                return result;
+                return await editTask(oldDescription, oldDescription);
             },
             [globalFilter],
             [true],
