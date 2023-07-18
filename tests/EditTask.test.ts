@@ -4,7 +4,6 @@
 import { fireEvent, render } from '@testing-library/svelte';
 import { describe, expect, it } from '@jest/globals';
 import moment from 'moment';
-import { verifyAllCombinations2 } from 'approvals/lib/Providers/Jest/CombinationApprovals';
 import { verify } from 'approvals/lib/Providers/Jest/JestApprovals';
 import { EMPTY } from 'approvals/lib/Utilities/Printers';
 import { taskFromLine } from '../src/Commands/CreateOrEditTaskParser';
@@ -18,7 +17,7 @@ import { updateSettings } from '../src/Config/Settings';
 window.moment = moment;
 const statusOptions: Status[] = [Status.DONE, Status.TODO];
 
-const EMPTY_ENTRY = {};
+const EMPTY_ENTRY = EMPTY[0];
 
 export function printCombinationsAsyncSoon<T1, T2, T3, T4, T5, T6, T7, T8, T9>(
     func: <T1, T2, T3, T4, T5, T6, T7, T8, T9>(
@@ -208,7 +207,7 @@ describe('Task editing', () => {
         const globalFilter = '#task';
 
         const oldDescription = 'simple task';
-        verifyAllCombinations2(
+        verifyAllCombinations2AsyncSoon(
             async (globalFilter, setCreatedDate) => {
                 GlobalFilter.set(globalFilter);
                 updateSettings({ setCreatedDate });
