@@ -4,6 +4,7 @@
 import { fireEvent, render } from '@testing-library/svelte';
 import { describe, expect, it } from '@jest/globals';
 import moment from 'moment';
+import { verify } from 'approvals/lib/Providers/Jest/JestApprovals';
 import { taskFromLine } from '../src/Commands/CreateOrEditTaskParser';
 import type { Task } from '../src/Task';
 import EditTask from '../src/ui/EditTask.svelte';
@@ -132,7 +133,6 @@ describe('Task editing', () => {
 
         const oldDescription = 'simple task';
         const received = await editTask(oldDescription, oldDescription);
-        const expected = '- [ ] #task simple task ➕ 2023-07-18';
-        expect(received).toEqual(expected);
+        verify(received);
     });
 });
