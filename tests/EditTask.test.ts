@@ -63,7 +63,7 @@ describe('Task editing', () => {
         GlobalFilter.reset();
     });
 
-    async function testDescriptionEdit(taskDescription: string, newDescription: string, expectedDescription: string) {
+    async function editTask(taskDescription: string, newDescription: string) {
         const task = taskFromLine({ line: `- [ ] ${taskDescription}`, path: '' });
 
         let resolvePromise: (input: string) => void;
@@ -89,6 +89,11 @@ describe('Task editing', () => {
         await fireEvent.input(description, { target: { value: newDescription } });
         submit.click();
         const editedTask = await waitForClose;
+        return editedTask;
+    }
+
+    async function testDescriptionEdit(taskDescription: string, newDescription: string, expectedDescription: string) {
+        const editedTask = await editTask(taskDescription, newDescription);
         expect(editedTask).toEqual(`- [ ] ${expectedDescription}`);
     }
 
