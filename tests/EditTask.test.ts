@@ -4,7 +4,7 @@
 import { fireEvent, render } from '@testing-library/svelte';
 import { describe, expect, it } from '@jest/globals';
 import moment from 'moment';
-import { verify } from 'approvals/lib/Providers/Jest/JestApprovals';
+import { verifyAllCombinations2 } from 'approvals/lib/Providers/Jest/CombinationApprovals';
 import { taskFromLine } from '../src/Commands/CreateOrEditTaskParser';
 import type { Task } from '../src/Task';
 import EditTask from '../src/ui/EditTask.svelte';
@@ -128,11 +128,17 @@ describe('Task editing', () => {
 
     it('issue 2112', async () => {
         const globalFilter = '#task';
-        GlobalFilter.set(globalFilter);
-        updateSettings({ setCreatedDate: true });
 
         const oldDescription = 'simple task';
-        const received = await editTask(oldDescription, oldDescription);
-        verify(received);
+        verifyAllCombinations2(
+            async (globalFilter, setCreatedDate) => {
+                GlobalFilter.set(globalFilter);
+                updateSettings({ setCreatedDate });
+                const result = await editTask(oldDescription, oldDescription);
+                return result;
+            },
+            [globalFilter],
+            [true],
+        );
     });
 });
