@@ -5,6 +5,8 @@ import { fireEvent, render } from '@testing-library/svelte';
 import { describe, expect, it } from '@jest/globals';
 import moment from 'moment';
 import { verifyAllCombinations2 } from 'approvals/lib/Providers/Jest/CombinationApprovals';
+import { verify } from 'approvals/lib/Providers/Jest/JestApprovals';
+import { EMPTY, printCombinations } from 'approvals/lib/Utilities/Printers';
 import { taskFromLine } from '../src/Commands/CreateOrEditTaskParser';
 import type { Task } from '../src/Task';
 import EditTask from '../src/ui/EditTask.svelte';
@@ -15,6 +17,25 @@ import { updateSettings } from '../src/Config/Settings';
 
 window.moment = moment;
 const statusOptions: Status[] = [Status.DONE, Status.TODO];
+
+export function verifyAllCombinations2AsyncSoon<T1, T2>(func: (t1: T1, t2: T2) => any, params1: T1[], params2: T2[]) {
+    // @ts-ignore
+    verify(
+        printCombinations(
+            // @ts-ignore
+            (t1: T1, t2: T2, _t3: any, _t4: any, _t5: any, _t6: any, _t7: any, _t8: any, _t9: any) => func(t1, t2),
+            params1,
+            params2,
+            EMPTY,
+            EMPTY,
+            EMPTY,
+            EMPTY,
+            EMPTY,
+            EMPTY,
+            EMPTY,
+        ),
+    );
+}
 
 describe('Task rendering', () => {
     afterEach(() => {
