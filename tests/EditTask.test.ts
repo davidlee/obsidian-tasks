@@ -19,7 +19,7 @@ const statusOptions: Status[] = [Status.DONE, Status.TODO];
 
 const EMPTY_ENTRY = EMPTY[0];
 
-export async function printCombinationsAsyncSoon<T1, T2, T3, T4, T5, T6, T7, T8, T9>(
+export async function printCombinationsAsync<T1, T2, T3, T4, T5, T6, T7, T8, T9>(
     func: <T1, T2, T3, T4, T5, T6, T7, T8, T9>(
         t1: T1,
         t2: T2,
@@ -74,14 +74,10 @@ export async function printCombinationsAsyncSoon<T1, T2, T3, T4, T5, T6, T7, T8,
     return text;
 }
 
-export async function verifyAllCombinations2AsyncSoon<T1, T2>(
-    func: (t1: T1, t2: T2) => any,
-    params1: T1[],
-    params2: T2[],
-) {
+export async function verifyAllCombinations2Async<T1, T2>(func: (t1: T1, t2: T2) => any, params1: T1[], params2: T2[]) {
     // @ts-ignore
     verify(
-        await printCombinationsAsyncSoon(
+        await printCombinationsAsync(
             // @ts-ignore
             async (t1: T1, t2: T2, _t3: any, _t4: any, _t5: any, _t6: any, _t7: any, _t8: any, _t9: any) =>
                 await func(t1, t2),
@@ -212,7 +208,7 @@ describe('Task editing', () => {
         const globalFilter = '#task';
 
         const oldDescription = 'simple task';
-        verifyAllCombinations2AsyncSoon(
+        verifyAllCombinations2Async(
             async (globalFilter, setCreatedDate) => {
                 GlobalFilter.set(globalFilter);
                 updateSettings({ setCreatedDate });
