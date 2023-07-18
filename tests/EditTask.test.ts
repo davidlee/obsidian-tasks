@@ -208,7 +208,7 @@ describe('Task editing', () => {
         const globalFilter = '#task';
 
         const oldDescription = 'simple task';
-        verifyAllCombinations2Async(
+        await verifyAllCombinations2Async(
             async (globalFilter, setCreatedDate) => {
                 GlobalFilter.set(globalFilter);
                 updateSettings({ setCreatedDate });
