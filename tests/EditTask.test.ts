@@ -6,7 +6,7 @@ import { describe, expect, it } from '@jest/globals';
 import moment from 'moment';
 import { verifyAllCombinations2 } from 'approvals/lib/Providers/Jest/CombinationApprovals';
 import { verify } from 'approvals/lib/Providers/Jest/JestApprovals';
-import { EMPTY, printCombinations } from 'approvals/lib/Utilities/Printers';
+import { EMPTY } from 'approvals/lib/Utilities/Printers';
 import { taskFromLine } from '../src/Commands/CreateOrEditTaskParser';
 import type { Task } from '../src/Task';
 import EditTask from '../src/ui/EditTask.svelte';
@@ -18,10 +18,67 @@ import { updateSettings } from '../src/Config/Settings';
 window.moment = moment;
 const statusOptions: Status[] = [Status.DONE, Status.TODO];
 
+const EMPTY_ENTRY = {};
+
+export function printCombinationsAsyncSoon<T1, T2, T3, T4, T5, T6, T7, T8, T9>(
+    func: <T1, T2, T3, T4, T5, T6, T7, T8, T9>(
+        t1: T1,
+        t2: T2,
+        t3: T3,
+        t4: T4,
+        t5: T5,
+        t6: T6,
+        t7: T7,
+        t8: T8,
+        t9: T9,
+    ) => any,
+    params1: T1[],
+    params2: T2[],
+    params3: T3[],
+    params4: T4[],
+    params5: T5[],
+    params6: T6[],
+    params7: T7[],
+    params8: T8[],
+    params9: T9[],
+): string {
+    let text = '';
+    for (const p1 of params1) {
+        for (const p2 of params2) {
+            for (const p3 of params3) {
+                for (const p4 of params4) {
+                    for (const p5 of params5) {
+                        for (const p6 of params6) {
+                            for (const p7 of params7) {
+                                for (const p8 of params8) {
+                                    for (const p9 of params9) {
+                                        let output;
+                                        try {
+                                            output = func(p1, p2, p3, p4, p5, p6, p7, p8, p9);
+                                        } catch (e) {
+                                            output = `${e}`;
+                                        }
+                                        const parameters = [p1, p2, p3, p4, p5, p6, p7, p8, p9].filter(
+                                            (p) => p !== EMPTY_ENTRY,
+                                        );
+
+                                        text += `[${parameters}] => ${output}\n`;
+                                    }
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        }
+    }
+    return text;
+}
+
 export function verifyAllCombinations2AsyncSoon<T1, T2>(func: (t1: T1, t2: T2) => any, params1: T1[], params2: T2[]) {
     // @ts-ignore
     verify(
-        printCombinations(
+        printCombinationsAsyncSoon(
             // @ts-ignore
             (t1: T1, t2: T2, _t3: any, _t4: any, _t5: any, _t6: any, _t7: any, _t8: any, _t9: any) => func(t1, t2),
             params1,
