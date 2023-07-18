@@ -167,8 +167,7 @@ describe('Task editing', () => {
 
         await fireEvent.input(description, { target: { value: newDescription } });
         submit.click();
-        const editedTask = await waitForClose;
-        return editedTask;
+        return await waitForClose;
     }
 
     async function testDescriptionEdit(taskDescription: string, newDescription: string, expectedDescription: string) {
