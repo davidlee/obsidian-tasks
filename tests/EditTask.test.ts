@@ -10,6 +10,7 @@ import EditTask from '../src/ui/EditTask.svelte';
 import { Status } from '../src/Status';
 import { DateFallback } from '../src/DateFallback';
 import { GlobalFilter } from '../src/Config/GlobalFilter';
+import { updateSettings } from '../src/Config/Settings';
 
 window.moment = moment;
 const statusOptions: Status[] = [Status.DONE, Status.TODO];
@@ -117,5 +118,14 @@ describe('Task editing', () => {
             newDescription,
             `${globalFilter} ${newDescription}`,
         );
+    });
+
+    it('issue 2112', async () => {
+        const globalFilter = '#task';
+        GlobalFilter.set(globalFilter);
+        updateSettings({ setCreatedDate: true });
+
+        const oldDescription = 'simple task';
+        await testDescriptionEdit(oldDescription, oldDescription, '#task simple task ➕ 2023-07-18');
     });
 });
