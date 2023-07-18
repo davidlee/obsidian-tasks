@@ -131,6 +131,8 @@ describe('Task editing', () => {
         updateSettings({ setCreatedDate: true });
 
         const oldDescription = 'simple task';
-        await testDescriptionEdit(oldDescription, oldDescription, '#task simple task ➕ 2023-07-18');
+        const received = await editTask(oldDescription, oldDescription);
+        const expected = '- [ ] #task simple task ➕ 2023-07-18';
+        expect(received).toEqual(expected);
     });
 });
